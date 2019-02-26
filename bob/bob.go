@@ -5,11 +5,40 @@
 // https://golang.org/doc/effective_go.html#commentary
 package bob
 
+import (
+	"regexp"
+	"strings"
+)
+
 // Hey should have a comment documenting it.
 func Hey(remark string) string {
-	// Write some code here to pass the test suite.
-	// Then remove all the stock comments.
-	// They're here to help you get started but they only clutter a finished solution.
-	// If you leave them in, reviewers may protest!
-	return ""
+	remark = strings.TrimSpace(remark)
+	if len(remark) < 1 {
+		return "Fine. Be that way!"
+	}
+	shout, question := false, false
+	matched, err := regexp.Match("[A-Za-z]", []byte(remark))
+	if err != nil {
+		return ""
+	}
+	if remark == strings.ToUpper(remark) && matched {
+		shout = true
+	}
+	switch remark[len(remark)-1] {
+	// case '!':
+	// 	shout = true
+	// 	break
+	case '?':
+		question = true
+	}
+
+	if shout && question {
+		return "Calm down, I know what I'm doing!"
+	} else if shout {
+		return "Whoa, chill out!"
+	} else if question {
+		return "Sure."
+	}
+
+	return "Whatever."
 }
